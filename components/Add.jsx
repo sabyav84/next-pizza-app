@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styles from "../styles/Add.module.css";
 import axios from "axios";
-import { useRouter } from "next/router";
+import Cookies from 'js-cookie';
 
 const Add = ({ setClose }) => {
   const [file, setFile] = useState(null);
@@ -10,6 +10,9 @@ const Add = ({ setClose }) => {
   const [prices, setPrices] = useState([]);
   const [extraOptions, setExtraOptions] = useState([]);
   const [extra, setExtra] = useState(null);
+  useEffect(() => {
+    Cookies.set('token', process.env.NEXT_PUBLIC_TOKEN, { path: '/' });
+  }, []);
 
   const changePrice = (e, index) => {
     const currentPrices = prices;
@@ -26,12 +29,15 @@ const Add = ({ setClose }) => {
   };
 
   const handleCreate = async () => {
+
     const data = new FormData();
-    data.append("file", file);
+     data.append("file", file);
     data.append("upload_preset", "uploads");
     try {
+  
+
       const uploadRes = await axios.post(
-        "https://api.cloudinary.com/v1_1/dsbyq4sj1/image/upload",
+        "https://api.cloudinary.com/v1_1/dhpu5ykzz/image/upload",
         data
       );
 
@@ -47,7 +53,7 @@ const Add = ({ setClose }) => {
       await axios.post("http://localhost:3000/api/products", newProduct);
       setClose(true);
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   };
 
@@ -123,9 +129,9 @@ const Add = ({ setClose }) => {
             </button>
           </div>
           <div className={styles.extraItems}>
-            {extraOptions.map((option) => (
-              <span key={option.text} className={styles.extraItem}>
-                {option.text}
+            {extraOptions?.map((option) => (
+              <span key={option?.text} className={styles.extraItem}>
+                {option?.text}
               </span>
             ))}
           </div>

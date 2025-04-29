@@ -30,7 +30,7 @@ const Cart = () => {
         router.push(`/orders/${res.data._id}`);
       }
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   };
 
